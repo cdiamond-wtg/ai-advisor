@@ -9,6 +9,8 @@ require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';  
 // define input fields
 $title = 'AI Advisor';
 $company = 'Customer Company Name';
+$contactName = 'Customer Contact Name';
+$contactEmail = 'Customer Contact Email';
 $ae = 'Account Executive';
 
 // get questions
@@ -65,12 +67,6 @@ $questions = getQuestions();
     .questions input {
       margin-right: 10px;
     }
-    .questions span {
-        display: block;
-        margin-left: var(--fieldset-padding);
-        font-size: 0.75em;
-        color: #555;
-    }
 </style>
 
 
@@ -82,33 +78,46 @@ $questions = getQuestions();
             <td><label for='company'><?php echo e($company); ?></label></td>
             <td><input type='text' id='company' name='company' placeholder="<?php echo e($company); ?>" size='50' required></td>
         </tr><tr>
+            <td><label for='contact_name'><?php echo e($contactName); ?></label></td>
+            <td><input type='text' id='contact_name' name='contact_name' placeholder="<?php echo e($contactName); ?>" size='50' required></td>
+        </tr><tr>
+            <td><label for='contact_email'><?php echo e($contactEmail); ?></label></td>
+            <td><input type='email' id='contact_email' name='contact_email' placeholder="<?php echo e($contactEmail); ?>" size='50' required></td>
+        </tr><tr>
             <td><label for='ae'><?php echo e($ae); ?></label></td>
             <td><input type='text' id='ae' name='ae' placeholder="<?php echo e($ae); ?>" size='50' required></td>
         </tr>
         <tbody class='questions'>
         <?php foreach ($questions as $question): ?>
-            <?php $inputName = $question['name'] . ($question['type'] === 'checkbox' ? '[]' : ''); ?>
+            <?php 
+            $inputName = $question['name'] . ($question['type'] === 'checkbox' ? '[]' : ''); 
+            $isRequired = !empty($question['required']);
+            ?>
             <tr>
                 <td colspan=2>
                     <fieldset>
                         <legend><?php echo e($question['question']); ?></legend>
-                        <?php foreach ($question['answers'] as $index => $answer): ?>
-                            <?php 
-                            $value = 'answer_' . ($index + 1);
-                            $subfield = $question['subfields'][$index] ?? null;
-                            ?>
-                            <label>
-                                <input 
-                                    type="<?php echo e($question['type']); ?>"
-                                    name="<?php echo e($inputName); ?>" 
-                                    value="<?php echo e($value); ?>" 
-                                    required
-                                ><?php echo e($answer); ?>
-                                <?php if (isset($subfield)): ?>
-                                    <span><?php echo e($subfield); ?></span>
-                                <?php endif; ?>
-                            </label>
-                        <?php endforeach; ?>
+                        <?php if ($question['type'] === 'text'): ?>
+                            <input 
+                                type='text'
+                                id="<?php echo e($inputName); ?>"
+                                name="<?php echo e($inputName); ?>"
+                                size=50
+                                <?php if ($isRequired): ?>required<?php endif; ?>
+                            >
+                        <?php else: ?>
+                            <?php foreach ($question['answers'] as $index => $answer): ?>
+                                <?php $value = 'answer_' . ($index + 1); ?>
+                                <label>
+                                    <input 
+                                        type="<?php echo e($question['type']); ?>"
+                                        name="<?php echo e($inputName); ?>" 
+                                        value="<?php echo e($value); ?>" 
+                                        <?php if ($isRequired && $index === 0): ?>required<?php endif; ?>
+                                    ><?php echo e($answer); ?>
+                                </label>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </fieldset>
                 </td>
             </tr>
