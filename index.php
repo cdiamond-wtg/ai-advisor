@@ -105,14 +105,25 @@ $questions = getQuestions();
                                 size=50
                                 <?php if ($isRequired): ?>required<?php endif; ?>
                             >
+                        <?php elseif ($question['type'] === 'select'): ?>
+                            <select
+                                id="<?php echo e($inputName); ?>
+                                name="<?php echo e($inputName); ?>
+                                <?php if ($isRequired): ?>required<?php endif; ?> 
+                            ><option value=''></option>
+                            <?php foreach ($question['answers'] as $index => $answer): ?>
+                                <option value="<?php echo e('answer_' . ($index + 1)); ?>">
+                                    <?php echo e($answer); ?>
+                                </option>
+                            <?php endforeach; ?>
+                            </select>
                         <?php else: ?>
                             <?php foreach ($question['answers'] as $index => $answer): ?>
-                                <?php $value = 'answer_' . ($index + 1); ?>
                                 <label>
                                     <input 
                                         type="<?php echo e($question['type']); ?>"
                                         name="<?php echo e($inputName); ?>" 
-                                        value="<?php echo e($value); ?>" 
+                                        value="<?php echo e('answer_' . ($index + 1)); ?>" 
                                         <?php if ($isRequired && $index === 0): ?>required<?php endif; ?>
                                     ><?php echo e($answer); ?>
                                 </label>
