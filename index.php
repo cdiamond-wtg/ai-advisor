@@ -48,8 +48,11 @@ $questions = getQuestions();
     #quote tr:nth-child(even){
       background-color: #FFFFFF;
     }
+    .questions {
+        --fieldset-padding: 25px;
+    }
     .questions fieldset {
-      padding: 25px;
+      padding: var(--fieldset-padding);
     }
     .questions legend {
       font-size: 1em;
@@ -61,6 +64,12 @@ $questions = getQuestions();
     }
     .questions input {
       margin-right: 10px;
+    }
+    .questions span {
+        display: block;
+        margin-left: var(--fieldset-padding);
+        font-size: 0.75em;
+        color: #555;
     }
 </style>
 
@@ -83,13 +92,22 @@ $questions = getQuestions();
                 <td colspan=2>
                     <fieldset>
                         <legend><?php echo e($question['question']); ?></legend>
-                        <?php foreach ($question['answers'] as $value => $answer): ?>
-                            <label><input 
-                                type="<?php echo e($question['type']); ?>"
-                                name="<?php echo e($inputName); ?>" 
-                                value="<?php echo e($value); ?>" 
-                                required
-                            ><?php echo e($answer); ?></label>
+                        <?php foreach ($question['answers'] as $index => $answer): ?>
+                            <?php 
+                            $value = 'answer_' . ($index + 1);
+                            $subfield = $question['subfields'][$index] ?? null;
+                            ?>
+                            <label>
+                                <input 
+                                    type="<?php echo e($question['type']); ?>"
+                                    name="<?php echo e($inputName); ?>" 
+                                    value="<?php echo e($value); ?>" 
+                                    required
+                                ><?php echo e($answer); ?>
+                                <?php if (isset($subfield)): ?>
+                                    <span><?php echo e($subfield); ?></span>
+                                <?php endif; ?>
+                            </label>
                         <?php endforeach; ?>
                     </fieldset>
                 </td>
