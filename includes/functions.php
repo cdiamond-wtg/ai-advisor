@@ -14,6 +14,7 @@ function getQuestions(): array {
                 'answer_2' => 'Answer 2',
                 'answer_3' => 'Answer 3',
             ],
+            'type' => 'radio',
         ],
         [
             'name' => 'dummy_answer_2',
@@ -23,6 +24,7 @@ function getQuestions(): array {
                 'answer_2' => 'Answer 2',
                 'answer_3' => 'Answer 3',
             ],
+            'type' => 'checkbox',
         ],
     ];
 }

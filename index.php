@@ -59,7 +59,7 @@ $questions = getQuestions();
       display: block;
       margin-bottom: 5px;
     }
-    .questions input[type='radio'] {
+    .questions input {
       margin-right: 10px;
     }
 </style>
@@ -78,14 +78,15 @@ $questions = getQuestions();
         </tr>
         <tbody class='questions'>
         <?php foreach ($questions as $question): ?>
+            <?php $inputName = $question['name'] . ($question['type'] === 'checkbox' ? '[]' : ''); ?>
             <tr>
                 <td colspan=2>
                     <fieldset>
                         <legend><?php echo e($question['question']); ?></legend>
                         <?php foreach ($question['answers'] as $value => $answer): ?>
                             <label><input 
-                                type='radio' 
-                                name="<?php echo e($question['name']); ?>" 
+                                type="<?php echo e($question['type']); ?>"
+                                name="<?php echo e($inputName); ?>" 
                                 value="<?php echo e($value); ?>" 
                                 required
                             ><?php echo e($answer); ?></label>
