@@ -1,7 +1,8 @@
 <?php
 
 require_once '../users/init.php';
-require_once 'includes/functions.php'; 
+require_once __DIR__ . '/includes/functions.php'; 
+require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';  // load template
 
 // check for user, and redirect to login if not logged in
 
@@ -10,7 +11,8 @@ $title = 'AI Advisor';
 $company = 'Customer Company Name';
 $ae = 'Account Executive';
 
-require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';  // load template
+// get questions
+$questions = getQuestions();
 
 ?>
 
@@ -75,25 +77,23 @@ require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';  
             <td><input type='text' id='ae' name='ae' placeholder="<?php echo e($ae); ?>" size='50' required></td>
         </tr>
         <tbody class='questions'>
-        <tr>
-            <td colspan=2>
-                <fieldset>
-                    <legend>Dummy question?</legend>
-                    <label><input type='radio' name='dummy_answer' value='answer_1' required>Answer 1</label>
-                    <label><input type='radio' name='dummy_answer' value='answer_2'>Answer 2</label>
-                    <label><input type='radio' name='dummy_answer' value='answer_3'>Answer 3</label>
-                </fieldset>
-            </td>
-        </tr><tr>
-            <td colspan=2>
-                <fieldset>
-                    <legend>Dummy question 2?</legend>
-                    <label><input type='radio' name='dummy_answer_2' value='answer_1' required>Answer 1</label>
-                    <label><input type='radio' name='dummy_answer_2' value='answer_2'>Answer 2</label>
-                    <label><input type='radio' name='dummy_answer_2' value='answer_3'>Answer 3</label>
-                </fieldset>
-            </td>
-        </tr>
+        <?php foreach ($questions as $question): ?>
+            <tr>
+                <td colspan=2>
+                    <fieldset>
+                        <legend><?php echo e($question['question']); ?></legend>
+                        <?php foreach ($question['answers'] as $value => $answer): ?>
+                            <label><input 
+                                type='radio' 
+                                name="<?php echo e($question['name']); ?>" 
+                                value="<?php echo e($value); ?>" 
+                                required
+                            ><?php echo e($answer); ?></label>
+                        <?php endforeach; ?>
+                    </fieldset>
+                </td>
+            </tr>
+        <?php endforeach; ?>
         </tbody>
     </table>
 </form>
