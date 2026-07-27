@@ -61,5 +61,15 @@ function getQuestions(): array {
             ],
             'type' => 'radio',
         ],
+        [
+            'name' => 'location',
+            'question' => 'Where is the company primarily located?',
+            'fields' => [
+                'City',
+                'State',
+                'Country',
+            ],
+            'type' => 'text_group',
+        ],
     ];
 }

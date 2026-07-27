@@ -105,6 +105,20 @@ $questions = getQuestions();
                                 size=50
                                 <?php if ($isRequired): ?>required<?php endif; ?>
                             >
+                        <?php elseif ($question['type'] === 'text_group'): ?>
+                            <?php foreach ($question['fields'] as $field): ?>
+                                <?php 
+                                $fieldName = strtolower(str_replace(' ', '_', $field));
+                                $fieldId = $question['name'] . '_' . $fieldName; 
+                                ?>
+                                <label style="margin-bottom: 1px" for="<?php echo e($fieldId); ?>"><?php echo e($field); ?></label>
+                                <input style="margin-bottom: 3px"
+                                    type='text'
+                                    id="<?php echo e($fieldId); ?>"
+                                    name="<?php echo e($question['name']); ?>[<?php echo e($fieldName); ?>]"
+                                    <?php if ($isRequired): ?>required<?php endif; ?>
+                                >
+                            <?php endforeach; ?>
                         <?php elseif ($question['type'] === 'select'): ?>
                             <select
                                 id="<?php echo e($inputName); ?>
