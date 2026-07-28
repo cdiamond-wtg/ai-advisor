@@ -64,14 +64,21 @@ $categories = getQuestions();
         font-weight: bold;
         text-transform: uppercase;
     }
+    #quote fieldset{
+        border: 0;
+        border-left: 4px solid #2F5496;
+        margin: 15px 0;
+        padding: 10px 15px;
+        background-color: #f4f7f8;
+    }
     #quote legend{
         font-size: 1em;
         margin-bottom: 0.25em;
-        margin-top: 1em;
     }
     #quote label{
         display: block;
         margin-bottom: 5px;
+
     }
     
 </style>
