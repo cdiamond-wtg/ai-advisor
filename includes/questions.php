@@ -59,6 +59,54 @@ return [
                     'unknown' => 'Unknown',
                 ],
             ],
+            [
+                'name' => 'location',
+                'type' => 'text_group',
+                'question' => 'Where is the company headquartered?',
+                'answers' => [
+                    'city' => 'City',
+                    'state' => 'State',
+                    'country' => 'Country',
+                ],
+                'required' => true,
+            ],
+            [
+                'name' => 'relationship',
+                'type' => 'select',
+                'question' => 'What is the company\'s relationship with us?',
+                'answers' => [
+                    'customer' => 'Customer',
+                    'prospect' => 'Prospect',
+                    'partner' => 'Partner',
+                    'dormant' => 'Dormant Account',
+                    'other' => 'Other',
+                ],
+            ],
+            [
+                'name' => 'description',
+                'type' => 'textarea',
+                'question' => 'Provide a brief description of the company.',
+            ],
+            # opportunities / products and services ??
+        ],
+    ],
+    [
+        'category' => 'Operational Context',
+        'questions' => [
+            [
+                'name' => 'products',
+                'type' => 'textarea',
+                'question' => 'What are the company\'s main products or services?',
+            ],
+            [
+                'name' => 'customers',
+                'type' => 'checkbox',
+                'question' => 'Who are the company\'s primary customers?',
+                'answers' => [
+                    'individuals' => 'Individuals',
+                    'small_businesses' => 'Small businesses',
+                ],
+            ],
         ],
     ],
 ];

@@ -78,8 +78,24 @@ $categories = getQuestions();
     #quote label{
         display: block;
         margin-bottom: 5px;
-
+        font-size: 0.9em;
     }
+    #quote input{
+        margin-right: 5px;
+    }
+    #quote select{
+        width: 100%;
+        max-width: 250px;
+        box-sizing: border-box;
+    }
+    #quote .text-group{
+        display: flex;
+        gap: 15px;
+    }
+    #quote .text-group-field{
+        flex: 1;
+    }
+
     
 </style>
 
@@ -109,6 +125,7 @@ $categories = getQuestions();
                 <summary><?php echo e($category['category']); ?></summary>
 
                 <?php foreach ($category['questions'] as $question): ?>
+                    <?php $isRequired = !empty($question['required']); ?>
                     <fieldset>
                         <legend><?php echo e($question['question']); ?></legend>
 
@@ -117,26 +134,49 @@ $categories = getQuestions();
                                 type="<?php echo e($question['type']); ?>"
                                 id="<?php echo e($question['name']); ?>"
                                 name="<?php echo e($question['name']); ?>"
-                                size='50'
-                                <?php if (!empty($question['required'])): ?>required<?php endif; ?>
+                                size='75'
+                                <?php if ($isRequired): ?>required<?php endif; ?>
                             >
-                        <?php elseif ($question['type'] === 'radio'): ?>
+                        <?php elseif ($question['type'] === 'text_group'): ?>
+                            <div class='text-group'>
+                            <?php foreach ($question['answers'] as $value => $label): ?>
+                                <?php $fieldId = $question['name'] . '_' . $value; ?>
+                                <div class='text-group-field'>
+                                <label for="<?php echo e($fieldId); ?>"><?php echo e($label); ?></label>
+                                <input
+                                    type='text'
+                                    id="<?php echo e($fieldId); ?>"
+                                    name="<?php echo e($question['name']); ?>[<?php echo e($value); ?>]"
+                                    <?php if ($isRequired): ?>required<?php endif; ?>
+                                >
+                                </div>
+                            <?php endforeach; ?>
+                            </div>
+                        <?php elseif ($question['type'] === 'textarea'): ?>
+                            <textarea
+                                id="<?php echo e($question['name']); ?>"
+                                name="<?php echo e($question['name']); ?>"
+                                rows=4
+                                cols=75
+                                <?php if ($isRequired): ?>required<?php endif; ?>
+                            ></textarea>
+                        <?php elseif (in_array($question['type'], ['radio', 'checkbox'], true)): ?>
                             <?php foreach ($question['answers'] as $value => $label): ?>
                                 <label>
                                     <input
-                                        type='radio'
+                                        type="<?php echo e($question['type']); ?>"
                                         name="<?php echo e($question['name']); ?>"
                                         value="<?php echo e($value); ?>"
-                                        <?php if (!empty($question['required'])): ?>required<?php endif; ?>
+                                        <?php if ($isRequired): ?>required<?php endif; ?>
                                     >
                                     <?php echo e($label); ?>
                                 </label>
-                            <?php endforeach; ?>
+                            <?php endforeach; ?>    
                         <?php elseif ($question['type'] === 'select'): ?>
                             <select
                                 id="<?php echo e($question['name']); ?>"
                                 name="<?php echo e($question['name']); ?>"
-                                <?php if (!empty($question['required'])): ?>required<?php endif; ?>
+                                <?php if ($isRequired): ?>required<?php endif; ?>
                             ><option value=''></option>
                             <?php foreach ($question['answers'] as $value => $label): ?>
                                 <option value="<?php echo e($value); ?>">
