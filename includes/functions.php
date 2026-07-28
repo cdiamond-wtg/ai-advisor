@@ -76,5 +76,20 @@ function getQuestions(): array {
                 ],
             ],
         ],
+        [
+            'category' => 'Next',
+            'questions' => [
+                [
+                    'name' => 'next_question',
+                    'question' => 'This is the next question?',
+                    'answers' => [
+                        'answer one',
+                        'answer two',
+                        'answer three',
+                    ],
+                    'type' => 'checkbox',
+                ],
+            ],
+        ],
     ];
 }

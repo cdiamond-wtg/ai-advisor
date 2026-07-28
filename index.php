@@ -7,7 +7,7 @@ require_once $abs_us_root . $us_url_root . 'users/includes/template/prep.php';  
 // check for user, and redirect to login if not logged in
 
 // define input fields
-$title = 'AI Advisor';
+$title = 'AI Advisor: Use Case Recommendation Tool';
 $company = 'Customer Company Name';
 $contactName = 'Customer Contact Name';
 $contactEmail = 'Customer Contact Email';
@@ -50,15 +50,13 @@ $questions = getQuestions();
     #quote tr:nth-child(even){
         background-color: #FFFFFF;
     }
-    .questions {
-        --fieldset-padding: 25px;
-    }
     .questions fieldset {
-        padding: var(--fieldset-padding);
+        margin: 5px 45px;
     }
     .questions legend {
         font-size: 1em;
         font-weight: bold;
+        margin-bottom: 0.25em;
     }
     .questions label {
         display: block;
@@ -71,15 +69,18 @@ $questions = getQuestions();
         display: none;
     }
     .questions > tr:first-child th {
-        padding: 0;
+        padding: 0.5rem 0.5rem 0 0.5rem;
+    }
+    .questions:last-of-type > tr:first-child th {
+        padding-bottom: 0.5rem;
     }
     .questions > tr:first-child button {
         width: 100%;
-        border: 0;
         padding: 10px 20px;
         font-size: 1.25em;
         font-weight: bold;
         text-align: left;
+        border: 0;
     }
     .questions > tr:first-child button::before {
         content: "▼";
@@ -182,7 +183,7 @@ $questions = getQuestions();
 
     </table>
 </form>
-<br/>
+<br/><br/>
 
 
 <script>
