@@ -112,11 +112,11 @@ $categories = getQuestions();
                     <fieldset>
                         <legend><?php echo e($question['question']); ?></legend>
 
-                        <?php if ($question['type'] === 'text'): ?>
+                        <?php if (in_array($question['type'], ['text', 'url'], true)): ?>
                             <input
-                                type='text'
-                                id='<?php echo e($question['name']); ?>'
-                                name='<?php echo e($question['name']); ?>'
+                                type="<?php echo e($question['type']); ?>"
+                                id="<?php echo e($question['name']); ?>"
+                                name="<?php echo e($question['name']); ?>"
                                 size='50'
                                 <?php if (!empty($question['required'])): ?>required<?php endif; ?>
                             >
@@ -125,13 +125,25 @@ $categories = getQuestions();
                                 <label>
                                     <input
                                         type='radio'
-                                        name='<?php echo e($question['name']); ?>'
-                                        value='<?php echo e($value); ?>'
+                                        name="<?php echo e($question['name']); ?>"
+                                        value="<?php echo e($value); ?>"
                                         <?php if (!empty($question['required'])): ?>required<?php endif; ?>
                                     >
                                     <?php echo e($label); ?>
                                 </label>
                             <?php endforeach; ?>
+                        <?php elseif ($question['type'] === 'select'): ?>
+                            <select
+                                id="<?php echo e($question['name']); ?>"
+                                name="<?php echo e($question['name']); ?>"
+                                <?php if (!empty($question['required'])): ?>required<?php endif; ?>
+                            ><option value=''></option>
+                            <?php foreach ($question['answers'] as $value => $label): ?>
+                                <option value="<?php echo e($value); ?>">
+                                    <?php echo e($label); ?>
+                                </option>
+                            <?php endforeach; ?>
+                            </select>
                         <?php endif; ?>
 
                     </fieldset>
