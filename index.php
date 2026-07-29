@@ -75,6 +75,9 @@ $categories = getQuestions();
         font-size: 1em;
         margin-bottom: 0.25em;
     }
+    #quote fieldset[data-max] legend{
+        margin-bottom: 0px;
+    }
     #quote label{
         display: block;
         margin-bottom: 5px;
@@ -95,8 +98,11 @@ $categories = getQuestions();
     #quote .text-group-field{
         flex: 1;
     }
-
-    
+    #quote .subtext{
+        font-style: italic;
+        font-size: 0.95em;
+        margin: 0 0 8px;
+    }
 </style>
 
 
@@ -126,8 +132,17 @@ $categories = getQuestions();
 
                 <?php foreach ($category['questions'] as $question): ?>
                     <?php $isRequired = !empty($question['required']); ?>
-                    <fieldset>
+                    <?php $hasMax = $question['type'] === 'checkbox' && isset($question['max_selections']); ?>
+                    
+                    <fieldset <?php if ($hasMax): ?>
+                        data-max="<?php echo (int) $question['max_selections']; ?>"
+                    <?php endif; ?> >
+
                         <legend><?php echo e($question['question']); ?></legend>
+
+                        <?php if ($hasMax): ?>
+                            <p class='subtext'>Select up to <?php echo (int) $question['max_selections']; ?> options.</p>
+                        <?php endif; ?>
 
                         <?php if (in_array($question['type'], ['text', 'url'], true)): ?>
                             <input
@@ -160,18 +175,27 @@ $categories = getQuestions();
                                 cols=75
                                 <?php if ($isRequired): ?>required<?php endif; ?>
                             ></textarea>
-                        <?php elseif (in_array($question['type'], ['radio', 'checkbox'], true)): ?>
+                        <?php elseif ($question['type'] === 'radio'): ?>
                             <?php foreach ($question['answers'] as $value => $label): ?>
                                 <label>
                                     <input
-                                        type="<?php echo e($question['type']); ?>"
+                                        type='radio'
                                         name="<?php echo e($question['name']); ?>"
                                         value="<?php echo e($value); ?>"
                                         <?php if ($isRequired): ?>required<?php endif; ?>
-                                    >
-                                    <?php echo e($label); ?>
+                                    ><?php echo e($label); ?>
                                 </label>
-                            <?php endforeach; ?>    
+                            <?php endforeach; ?>
+                        <?php elseif ($question['type'] === 'checkbox'): ?>
+                            <?php foreach ($question['answers'] as $value => $label): ?>
+                                <label>
+                                    <input
+                                        type='checkbox'
+                                        name="<?php echo e($question['name']); ?>[]"
+                                        value="<?php echo e($value); ?>"
+                                    ><?php echo e($label); ?>
+                                </label>
+                            <?php endforeach; ?>
                         <?php elseif ($question['type'] === 'select'): ?>
                             <select
                                 id="<?php echo e($question['name']); ?>"
@@ -195,3 +219,21 @@ $categories = getQuestions();
     </div>
 </form>
 <br/>
+
+
+<script>
+document.addEventListener('change', function (event) {
+    if (!event.target.matches('fieldset[data-max] input[type="checkbox"]')) {
+        return;
+    }
+
+    const group = event.target.closest('fieldset');
+    const selected = group.querySelectorAll('input:checked').length;
+    const maximum = Number(group.dataset.max);
+
+    if (selected > maximum) {
+        event.target.checked = false;
+        alert('You can select up to ' + maximum + ' options.');
+    }
+});
+</script>
