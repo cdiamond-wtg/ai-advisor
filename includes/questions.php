@@ -138,6 +138,7 @@ return [
                 'name' => 'operating_activities',
                 'type' => 'checkbox',
                 'question' => 'What are the company\'s major operating activities?',
+                'max_selections' => 5,
                 'answers' => [
                     'marketing' => 'Marketing and generating demand',
                     'finding_customers' => 'Finding and qualifying customers',

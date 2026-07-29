@@ -75,9 +75,6 @@ $categories = getQuestions();
         font-size: 1em;
         margin-bottom: 0.25em;
     }
-    #quote fieldset[data-max] legend{
-        margin-bottom: 0px;
-    }
     #quote label{
         display: block;
         margin-bottom: 5px;
@@ -102,6 +99,9 @@ $categories = getQuestions();
         font-style: italic;
         font-size: 0.95em;
         margin: 0 0 8px;
+    }
+    #quote legend:has(+ .subtext){
+        margin-bottom: 0px;
     }
 </style>
 
@@ -132,7 +132,8 @@ $categories = getQuestions();
 
                 <?php foreach ($category['questions'] as $question): ?>
                     <?php $isRequired = !empty($question['required']); ?>
-                    <?php $hasMax = $question['type'] === 'checkbox' && isset($question['max_selections']); ?>
+                    <?php $isCheckbox = $question['type'] === 'checkbox'; ?>
+                    <?php $hasMax = $isCheckbox && isset($question['max_selections']); ?>
                     
                     <fieldset <?php if ($hasMax): ?>
                         data-max="<?php echo (int) $question['max_selections']; ?>"
@@ -142,6 +143,8 @@ $categories = getQuestions();
 
                         <?php if ($hasMax): ?>
                             <p class='subtext'>Select up to <?php echo (int) $question['max_selections']; ?> options.</p>
+                        <?php elseif ($isCheckbox): ?>
+                            <p class='subtext'>Select all applicable options.</p>
                         <?php endif; ?>
 
                         <?php if (in_array($question['type'], ['text', 'url'], true)): ?>
