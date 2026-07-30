@@ -103,6 +103,14 @@ $categories = getQuestions();
     #quote legend:has(+ .subtext){
         margin-bottom: 0px;
     }
+    #profile_button{
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    #profile_response{
+        margin-top: 10px;
+        margin-left: 20px;
+    }
 </style>
 
 
@@ -264,8 +272,8 @@ profileButton.addEventListener('click', async function () {
 
     try {
         const response = await fetch('crm.php', {method: 'POST', body: requestData});
-        const responseText = await response.text();
-        profileResponse.textContent = responseText;
+        const result = await response.json();
+        profileResponse.textContent = result.message ?? '';
     }
     catch (error) {
         profileResponse.textContent = 'Unable to send CRM request.';
