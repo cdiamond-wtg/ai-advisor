@@ -148,9 +148,17 @@ $categories = getQuestions();
                     <?php $isCheckbox = $question['type'] === 'checkbox'; ?>
                     <?php $hasMax = $isCheckbox && isset($question['max_selections']); ?>
                     
-                    <fieldset <?php if ($hasMax): ?>
-                        data-max="<?php echo (int) $question['max_selections']; ?>"
-                    <?php endif; ?> >
+                    <fieldset 
+                        <?php if ($hasMax): ?>
+                            data-max="<?php echo (int) $question['max_selections']; ?>"
+                        <?php endif; ?> 
+
+                        <?php if (isset($question['show_if'])): ?>
+                            data-show-if-question="<?php echo e($question['show_if']['question']); ?>"
+                            data-show-if-value="<?php echo e($question['show_if']['value']); ?>"
+                            hidden
+                        <?php endif; ?>
+                    >
 
                         <legend><?php echo e($question['question']); ?></legend>
 
@@ -159,6 +167,8 @@ $categories = getQuestions();
                         <?php elseif ($isCheckbox): ?>
                             <p class='subtext'>Select all applicable options.</p>
                         <?php endif; ?>
+
+                        
 
                         <?php if (in_array($question['type'], ['text', 'url'], true)): ?>
                             <input
@@ -285,6 +295,20 @@ document.addEventListener('change', function (event) {
         alert('You can select up to ' + maximum + ' options.');
     }
 });
+
+// show or hide conditional questions based on checkbox values
+function updateConditionalQuestions() {
+    document.querySelectorAll('[data-show-if-question]').forEach(fieldset => {
+        const question = fieldset.dataset.showIfQuestion;
+        const value = fieldset.dataset.showIfValue;
+        const answer = document.querySelector(
+            `[name="${question}[]"][value="${value}"]`
+        );
+        fieldset.hidden = !answer?.checked;
+    });
+}
+document.addEventListener('change', updateConditionalQuestions);
+updateConditionalQuestions();
 
 // load profile data from crm upon button click
 function fillProfileFields(profile) {

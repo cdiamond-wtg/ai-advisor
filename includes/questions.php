@@ -264,6 +264,16 @@ return [
                     'other' => 'Other',
                 ],
             ],
+            [
+                'name' => 'sales_test',
+                'type' => 'checkbox',
+                'question' => 'Testing conditional question?',
+                'answers' => ['one' => 'One', 'two' => 'Two'],
+                'show_if' => [
+                    'question' => 'business_areas',
+                    'value' => 'sales',
+                ],
+            ],
         ],
     ],
 ];
