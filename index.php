@@ -243,15 +243,17 @@ function populateSelect(selectId, choices) {
     const select = document.getElementById(selectId);
     if (!select) return;
 
-    if (Object.keys(choices).length === 0) {
-        select.replaceChildren(new Option('Options unavailable', ''));
-        return;
+    select.replaceChildren(new Option('', ''));
+    let entries = Object.entries(choices);
+    if (selectId === 'industry') {
+        entries.sort(([, labelA], [, labelB]) => labelA.localeCompare(labelB));
     }
-
-    select.replaceChildren(new Option('Select an option', ''));
-    Object.entries(choices).forEach(([id, label]) => {
-        select.add(new Option(label, id));
-    });
+    entries.forEach(([id, label]) => {select.add(new Option(label, id));});
+    
+    const existingLabels = Array.from(select.options).map(
+        option => option.text.trim().toLowerCase());
+    if (!existingLabels.includes('other')) select.add(new Option('Other', 'other'));
+    if (!existingLabels.includes('unknown')) select.add(new Option('Unknown', 'unknown'));
 }
 
 // load choices
