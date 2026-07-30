@@ -197,3 +197,35 @@ if (
         ]);
     }
 }
+
+// handle form request --> get choices from crm for dropdown menu
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    ($_POST['action'] ?? '') === 'load_choices'
+) {
+    $choiceCols = [
+        'relationship' => 'customertypecode',
+        'industry' => 'wtg_industry',
+    ];
+    $col = $_POST['column'] ?? '';
+    if (!isset($choiceCols[$col])) {
+        sendJsonResponse([
+            'success' => false,
+            'choices' => (object) [],
+        ]);
+    }
+
+    $token = getAccessToken();
+    if ($token === null) {
+        sendJsonResponse([
+            'success' => false,
+            'choices' => (object) [],
+        ]);
+    }
+
+    $choices = getChoiceOptions('account', $choiceCols[$col], $token) ?? [];
+    sendJsonResponse([
+        'success' => !empty($choices),
+        'choices' => (object) $choices,
+    ]);
+}

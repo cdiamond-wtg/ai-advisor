@@ -238,6 +238,36 @@ $categories = getQuestions();
 
 
 <script>
+// populate dropdown menus
+function populateSelect(selectId, choices) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    if (Object.keys(choices).length === 0) {
+        select.replaceChildren(new Option('Options unavailable', ''));
+        return;
+    }
+
+    select.replaceChildren(new Option('Select an option', ''));
+    Object.entries(choices).forEach(([id, label]) => {
+        select.add(new Option(label, id));
+    });
+}
+
+// load choices
+async function loadChoices(column) {
+    const formData = new FormData();
+    formData.append('action', 'load_choices');
+    formData.append('column', column);
+
+    const response = await fetch('crm.php', {method: 'POST', body: formData});
+    const result = await response.json();
+    populateSelect(column, result.success ? result.choices : {});
+}
+
+loadChoices('relationship');
+loadChoices('industry');
+
 // restrict number of checkbox selections to max
 document.addEventListener('change', function (event) {
     if (!event.target.matches('fieldset[data-max] input[type="checkbox"]')) {
