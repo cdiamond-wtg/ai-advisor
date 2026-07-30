@@ -246,7 +246,7 @@ return [
                 'name' => 'business_areas',
                 'type' => 'checkbox',
                 'max_selections' => 3,
-                'question' => 'Which business areas present the greatest opportunities to explore?',
+                'question' => 'Which of the company\'s business areas present the greatest opportunities to explore?',
                 'answers' => [
                     'sales' => 'Sales',
                     'marketing' => 'Marketing',
@@ -265,13 +265,34 @@ return [
                 ],
             ],
             [
-                'name' => 'sales_test',
+                'name' => 'sales_opportunities',
                 'type' => 'checkbox',
-                'question' => 'Testing conditional question?',
-                'answers' => ['one' => 'One', 'two' => 'Two'],
+                'question' => 'Which of the below statements are true regarding sales at the company?',
+                'answers' => [
+                    'time' => 'Sellers spend significant time researching accounts',
+                    'leads' => 'Leads or opportunities are not consistently prioritized',
+                    'followup' => 'Follow-up is slow or inconsistent',
+                    'crm' => 'CRM records are incomplete or outdated',
+                    'proposals' => 'Proposals and quotes are too difficult or time-consuming to create',
+                    'repetition' => 'Salespeople repeatedly create similar emails or presentations',
+                    'prediction' => 'Management has difficulty predicting which deals will close when',
+                    'knowledge' => 'Sales knowledge is concentrated among a few employees',
+                    'upsell' => 'Cross-sell or upsell opportunities are frequently missed',
+                    'none' => 'None of these are significant problems',
+                ],
                 'show_if' => [
                     'question' => 'business_areas',
                     'value' => 'sales',
+                ],
+            ],
+            [
+                'name' => 'sales_steps',
+                'type' => 'textarea',
+                'question' => 'Explain the sales process at the company from lead generation '
+                    . 'to opportunity close. Which steps require the most time, effort, or judgement?',
+                'show_if' => [
+                    'question' => 'business_areas', 
+                    'value' => 'sales'
                 ],
             ],
         ],
