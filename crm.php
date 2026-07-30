@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 // send request to api
 function sendRequest(string $url, array $options, array $header): ?array {  # change return type
     $curl = curl_init();
@@ -22,8 +24,9 @@ function getEnvironmentUrl(): string {
 // get access token for crm reader app
 function getAccessToken(): ?string {
 
-    # add caching --> cache access token and expiration time, and reuse until expired
-    # --> only request new token once cached token expired
+    # get cached token if available
+    if (isset($_SESSION['access_token'], $_SESSION['token_expires_at']) &&
+        time() < $_SESSION['token_expires_at']) return $_SESSION['access_token'];
 
     $tenantId = getenv('MS_TENANT_ID');
     $clientId = getenv('MS_CRM_CLIENT_ID');
@@ -43,7 +46,13 @@ function getAccessToken(): ?string {
     ];
     $data = sendRequest($url, $options, $header);
 
-    return is_array($data) && array_key_exists('access_token', $data) ? $data['access_token'] : null;
+    if (!isset($data['access_token'])) return null;
+
+    # cache token
+    $_SESSION['access_token'] = $data['access_token'];
+    $_SESSION['token_expires_at'] = time() + (int) ($data['expires_in'] ?? 3600) - 60;
+
+    return $_SESSION['crm_access_token'];
 }
 
 // get choice metadata --> maps integers to labels for option set columns

@@ -18,10 +18,7 @@ return [
                 'name' => 'industry',
                 'type' => 'select',
                 'question' => 'What industry does the company primarily operate in?',
-                'answers' => [
-                    'other' => 'Other',
-                    'unknown' => 'Unknown',
-                ],
+                'answers' => [],
             ],
             [
                 'name' => 'employee_count',
@@ -70,13 +67,7 @@ return [
                 'name' => 'relationship',
                 'type' => 'select',
                 'question' => 'What is the company\'s relationship with us?',
-                'answers' => [
-                    'customer' => 'Customer',
-                    'prospect' => 'Prospect',
-                    'partner' => 'Partner',
-                    'dormant' => 'Dormant Account',
-                    'other' => 'Other',
-                ],
+                'answers' => [],
             ],
             [
                 'name' => 'description',
