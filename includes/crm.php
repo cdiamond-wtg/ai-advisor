@@ -106,11 +106,22 @@ function getAccountData(string $account, ?string $accessToken): ?array {
 }
 
 // map account data to profile questions
-function mapAccountData(array $data): ?array {
+function mapAccountData(array $data, string $accessToken): ?array {
     if ($data === null) return null;
+
+    # map option select choices to labels
+    $rtype_col = 'customertypecode';
+    $relationship_types = getChoiceOptions('account', $rtype_col, $accessToken);
+    $relationship_type = $data[$rtype_col] ?? '';
+    if (!empty($relationship_types)) $relationship_type = $relationship_types[$relationship_type];
+    $ind_col = 'wtg_industry';
+    $industries = getChoiceOptions('account', $ind_col, $accessToken);
+    $industry = $data[$ind_col] ?? '';
+    if (!empty($industries)) $industry = $industries[$industry];
+
     return [
         'website' => $data['websiteurl'] ?? '',
-        'industry' => $data['wtg_industry'] ?? '',
+        'industry' => $industry,
         'employee_count' => $data['numberofemployees'] ?? '',
         'annual_revenue' => $data['revenue'] ?? '',
         'location' => [
@@ -118,13 +129,12 @@ function mapAccountData(array $data): ?array {
             'state' => $data['address1_stateorprovince'] ?? '',
             'country' => $data['address1_country'] ?? '',
         ],
-        'relationship' => $data['customertypecode'] ?? '',
+        'relationship' => $relationship_type,
         'description' => $data['description'] ?? '',
     ];
 }
 
 $token = getAccessToken();
 $data = getAccountData('Advantage Surveillance', $token);
-$map = mapAccountData($data);
+$map = mapAccountData($data, $token);
 var_dump($map);
-var_dump(getChoiceOptions('account', 'customertypecode', $token));
