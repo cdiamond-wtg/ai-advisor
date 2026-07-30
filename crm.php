@@ -115,6 +115,7 @@ function mapAccountData(?array $data, ?string $accessToken): ?array {
     $relationship_types = getChoiceOptions('account', $rtype_col, $accessToken);
     $relationship_type = $data[$rtype_col] ?? '';
     if (!empty($relationship_types)) $relationship_type = $relationship_types[$relationship_type];
+
     $ind_col = 'wtg_industry';
     $industries = getChoiceOptions('account', $ind_col, $accessToken);
     $industry = $data[$ind_col] ?? '';
@@ -143,7 +144,7 @@ function sendJsonResponse(array $response): never {
 }
 
 
-// handle form request
+// handle form request --> load profile data from crm
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST' && 
     ($_POST['action'] ?? '') === 'load_profile'
@@ -185,7 +186,9 @@ if (
         sendJsonResponse([
             'profile_found' => true,
             'message' => 'Company profile loaded from CRM. Review and edit information before submitting.',
+            'profile' => $profile,
         ]);
+
     } catch (Throwable $exception) {
         error_log('CRM profile lookup failed: ' . $exception->getMessage());
         sendJsonResponse([

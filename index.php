@@ -274,6 +274,10 @@ profileButton.addEventListener('click', async function () {
         const response = await fetch('crm.php', {method: 'POST', body: requestData});
         const result = await response.json();
         profileResponse.textContent = result.message ?? '';
+        if (!result.profile_found || !result.profile) return;
+        const profile = result.profile;
+        document.getElementById('website').value = profile.website ?? '';
+        document.getElementById('description').value = profile.description ?? '';
     }
     catch (error) {
         profileResponse.textContent = 'Unable to send CRM request.';
