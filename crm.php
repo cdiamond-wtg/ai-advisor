@@ -16,7 +16,7 @@ function sendRequest(string $url, array $options, array $header): ?array {  # ch
 
 // get environment url for crm
 function getEnvironmentUrl(): string {
-    return rtrim(getenv('MS_ENVIRONMENT_URL'), '/');
+    return rtrim(getenv('MS_CRM_ENVIRONMENT_URL'), '/');
 }
 
 // get access token for crm reader app
@@ -26,8 +26,8 @@ function getAccessToken(): ?string {
     # --> only request new token once cached token expired
 
     $tenantId = getenv('MS_TENANT_ID');
-    $clientId = getenv('MS_CLIENT_ID');
-    $clientSecret = getenv('MS_CLIENT_SECRET');
+    $clientId = getenv('MS_CRM_CLIENT_ID');
+    $clientSecret = getenv('MS_CRM_CLIENT_SECRET');
     $environmentUrl = getEnvironmentUrl();
     if (!$tenantId || !$clientId || !$clientSecret || !$environmentUrl) return null;
 
@@ -103,11 +103,11 @@ function getAccountData(string $account, ?string $accessToken): ?array {
     ];
     $data = sendRequest($url, $options, $header);
 
-    return is_array($data) && array_key_exists('value', $data) ? $data['value'][0] : null;
+    return is_array($data) && isset($data['value'][0]) ? $data['value'][0] : null;
 }
 
 // map account data to profile questions
-function mapAccountData(array $data, string $accessToken): ?array {
+function mapAccountData(?array $data, ?string $accessToken): ?array {
     if ($data === null) return null;
 
     # map option select choices to labels
@@ -142,13 +142,6 @@ function sendJsonResponse(array $response): never {
     exit;
 }
 
-/*
-// testing locally
-$token = getAccessToken();
-$data = getAccountData('Advantage Surveillance', $token);
-$map = mapAccountData($data, $token);
-var_dump($map);
-*/
 
 // handle form request
 if (

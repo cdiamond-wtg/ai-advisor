@@ -227,6 +227,7 @@ return [
                 'name' => 'obstacles',
                 'type' => 'checkbox',
                 'max_selections' => 5,
+                'question' => 'What are the most significant obstacles to achieving the company\'s goals?',
                 'answers' => [
                     'staff' => 'Insufficient staff or limited employee capacity',
                     'skills' => 'Difficulty hiring or retaining skilled employees',

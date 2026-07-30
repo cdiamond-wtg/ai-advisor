@@ -130,6 +130,11 @@ $categories = getQuestions();
             <details name='categories'>
                 <summary><?php echo e($category['category']); ?></summary>
 
+                <?php if ($category['category'] === 'Company Profile'): ?>
+                    <button type='button' id='profile_button'>Load Profile</button>
+                    <pre id='profile_response'></pre>
+                <?php endif; ?>
+
                 <?php foreach ($category['questions'] as $question): ?>
                     <?php $isRequired = !empty($question['required']); ?>
                     <?php $isCheckbox = $question['type'] === 'checkbox'; ?>
@@ -225,6 +230,7 @@ $categories = getQuestions();
 
 
 <script>
+// restrict number of checkbox selections to max
 document.addEventListener('change', function (event) {
     if (!event.target.matches('fieldset[data-max] input[type="checkbox"]')) {
         return;
@@ -237,6 +243,36 @@ document.addEventListener('change', function (event) {
     if (selected > maximum) {
         event.target.checked = false;
         alert('You can select up to ' + maximum + ' options.');
+    }
+});
+
+// load profile data from crm upon button click
+const profileButton = document.getElementById('profile_button');
+const profileResponse = document.getElementById('profile_response');
+const companyInput = document.getElementById('company');
+
+profileButton.addEventListener('click', async function () {
+    const company = companyInput.value.trim();
+    const requestData = new FormData();
+
+    requestData.append('action', 'load_profile');
+    requestData.append('company', company);
+
+    profileButton.disabled = true;
+    profileButton.textContent = 'Loading profile...';
+    profileResponse.textContent = '';
+
+    try {
+        const response = await fetch('crm.php', {method: 'POST', body: requestData});
+        const responseText = await response.text();
+        profileResponse.textContent = responseText;
+    }
+    catch (error) {
+        profileResponse.textContent = 'Unable to send CRM request.';
+    }
+    finally {
+        profileButton.disabled = false;
+        profileButton.textContent = 'Load Profile';
     }
 });
 </script>
