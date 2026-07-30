@@ -85,6 +85,7 @@ function getAccountData(string $account, ?string $accessToken): ?array {
     $environmentUrl = getEnvironmentUrl();
     if (!$environmentUrl) return null;
 
+    $account = str_replace("'", "\'", $account);  // escape single quotes
     $query = http_build_query([
         '$select' => 'accountid,name,websiteurl,wtg_industry,numberofemployees,revenue,'
             . 'address1_city,address1_stateorprovince,address1_country,'
@@ -134,7 +135,10 @@ function mapAccountData(array $data, string $accessToken): ?array {
     ];
 }
 
+/*
+// testing locally
 $token = getAccessToken();
 $data = getAccountData('Advantage Surveillance', $token);
 $map = mapAccountData($data, $token);
 var_dump($map);
+*/
