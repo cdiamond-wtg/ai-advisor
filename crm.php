@@ -135,6 +135,13 @@ function mapAccountData(array $data, string $accessToken): ?array {
     ];
 }
 
+// send json response to browser
+function sendJsonResponse(array $response): never {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($response, JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
 /*
 // testing locally
 $token = getAccessToken();
@@ -142,3 +149,55 @@ $data = getAccountData('Advantage Surveillance', $token);
 $map = mapAccountData($data, $token);
 var_dump($map);
 */
+
+// handle form request
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' && 
+    ($_POST['action'] ?? '') === 'load_profile'
+) {
+    $company = trim($_POST['company'] ?? '');
+
+    if ($company === '') {
+        sendJsonResponse([
+            'profile_found' => false,
+            'message' => 'Enter a company name or complete the profile manually.',
+        ]);
+    }
+
+    try {
+        $token = getAccessToken();
+        if ($token === null) {
+            sendJsonResponse([
+                'profile_found' => false,
+                'message' => 'Cannot connect to CRM. Enter company profile manually.',
+            ]);
+        }
+
+        $data = getAccountData($company, $token);
+        if ($data === null) {
+            sendJsonResponse([
+                'profile_found' => false,
+                'message' => 'Company not found in CRM. Try a different name or enter company profile manually.',
+            ]);
+        }
+
+        $profile = mapAccountData($data, $token);
+        if ($profile === null) {
+            sendJsonResponse([
+                'profile_found' => false,
+                'message' => 'CRM profile could not be loaded. Enter manually.',
+            ]);
+        }
+
+        sendJsonResponse([
+            'profile_found' => true,
+            'message' => 'Company profile loaded from CRM. Review and edit information before submitting.',
+        ]);
+    } catch (Throwable $exception) {
+        error_log('CRM profile lookup failed: ' . $exception->getMessage());
+        sendJsonResponse([
+            'profile_found' => false,
+            'message' => 'CRM profile unavailable. Enter company profile manually.',
+        ]);
+    }
+}
