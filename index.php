@@ -249,7 +249,7 @@ function populateSelect(selectId, choices) {
         entries.sort(([, labelA], [, labelB]) => labelA.localeCompare(labelB));
     }
     entries.forEach(([id, label]) => {select.add(new Option(label, id));});
-    
+
     const existingLabels = Array.from(select.options).map(
         option => option.text.trim().toLowerCase());
     if (!existingLabels.includes('other')) select.add(new Option('Other', 'other'));
@@ -309,6 +309,8 @@ profileButton.addEventListener('click', async function () {
         if (!result.profile_found || !result.profile) return;
         const profile = result.profile;
         document.getElementById('website').value = profile.website ?? '';
+        document.getElementById('industry').value = profile.industry ?? '';
+        document.getElementById('relationship').value = profile.relationship ?? '';
         document.getElementById('description').value = profile.description ?? '';
     }
     catch (error) {
