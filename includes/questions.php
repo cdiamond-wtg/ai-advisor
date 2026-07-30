@@ -100,7 +100,6 @@ return [
                     'nonprofits' => 'Nonprofit organizations',
                     'internal' => 'Internal departments or employees',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
                 ],
             ],
             [
@@ -122,7 +121,7 @@ return [
                     'leasing' => 'Leasing or rentals',
                     'commission' => 'Commission or brokerage fees',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
+
                 ],
             ],
             [
@@ -150,7 +149,6 @@ return [
                     'risk' => 'Managing risk, compliance, or legal requirements',
                     'reports' => 'Creating reports and analyzing performance',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
                 ],
             ],
             [
@@ -175,7 +173,6 @@ return [
                     'expectations' => 'Changing customer expectations or satisfaction',
                     'none' => 'No major changes',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
                 ]
             ]
         ],
@@ -211,7 +208,6 @@ return [
                     'security' => 'Increased cybersecurity, privacy, or resiliance',
                     'technology' => 'Technology or process modernization',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
                 ],
             ],
             [
@@ -239,7 +235,33 @@ return [
                     'security' => 'Security, privacy, or compliance requirements',
                     'ownership' => 'Unclear ownership or accountability',
                     'other' => 'Other',
-                    'unknown' => 'Unknown',
+                ],
+            ],
+        ],
+    ],
+    [
+        'category' => 'Areas of Opportunity',
+        'questions' => [
+            [
+                'name' => 'business_areas',
+                'type' => 'checkbox',
+                'max_selections' => 3,
+                'question' => 'Which business areas present the greatest opportunities to explore?',
+                'answers' => [
+                    'sales' => 'Sales',
+                    'marketing' => 'Marketing',
+                    'customer_service' => 'Customer service',
+                    'delivery' => 'Project or service delivery',
+                    'operations' => 'Operations',
+                    'procurement' => 'Procurement and supply chain',
+                    'finance' => 'Finance and accounting',
+                    'hr' => 'Human resources',
+                    'it' => 'Information technology',
+                    'legal' => 'Legal, risk, and compliance',
+                    'development' => 'Product development',
+                    'reporting' => 'Executive reporting and planning',
+                    'admin' => 'General administration',
+                    'other' => 'Other',
                 ],
             ],
         ],
