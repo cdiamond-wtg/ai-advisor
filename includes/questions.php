@@ -9,11 +9,11 @@ return [
                 'type' => 'url',
                 'question' => 'Enter the company website URL.',
             ],
-            [
-                'name' => 'linkedin',
-                'type' => 'url',
-                'question' => 'Enter the company LinkedIn page.',
-            ],
+            // [
+            //     'name' => 'linkedin',
+            //     'type' => 'url',
+            //     'question' => 'Enter the company LinkedIn page.',
+            // ],
             [
                 'name' => 'industry',
                 'type' => 'select',

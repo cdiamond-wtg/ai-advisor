@@ -110,11 +110,34 @@ function getAccountData(string $account, ?string $accessToken): ?array {
 function mapAccountData(?array $data, ?string $accessToken): ?array {
     if ($data === null) return null;
 
+    // map employee count and annual revenue to specified ranges
+    $employees = (int) $data['numberofemployees'] ?? 0;
+    if ($employees >= 1 && $employees <= 10) $employees = '1_10';
+    elseif ($employees >= 11 && $employees <= 50) $employees = '11_50';
+    elseif ($employees >= 51 && $employees <= 200) $employees = '51_200';
+    elseif ($employees >= 201 && $employees <= 500) $employees = '201_500';
+    elseif ($employees >= 501 && $employees <= 1000) $employees = '501_1000';
+    elseif ($employees >= 1001 && $employees <= 5000) $employees = '1001_5000';
+    elseif ($employees >= 5001 && $employees <= 10000) $employees = '5001_10000';
+    elseif ($employees >= 10001) $employees = '10001_plus';
+    else $employees = '';
+
+    $revenue = (int) $data['revenue'] ?? 0;
+    if ($revenue < 5e5) $revenue = 'under_500k';
+    elseif ($revenue >= 5e5 && $revenue < 1e6) $revenue = '500k_1m';
+    elseif ($revenue >= 1e6 && $revenue < 2.5e6) $revenue = '1m_2p5m';
+    elseif ($revenue >= 2.5e6 && $revenue < 5e6) $revenue = '2p5m_5m';
+    elseif ($revenue >= 5e6 && $revenue < 1e7) $revenue = '5m_10m';
+    elseif ($revenue >= 1e7 && $revenue < 1e8) $revenue = '10m_100m';
+    elseif ($revenue >= 1e8 && $revenue < 5e8) $revenue = '100m_500m';
+    elseif ($revenue >= 5e8 && $revenue <= 1e9) $revenue = '500m_1b';
+    elseif ($revenue > 1e9) $revenue = 'over_1b';
+
     return [
         'website' => $data['websiteurl'] ?? '',
         'industry' => $data['wtg_industry'],
-        'employee_count' => $data['numberofemployees'] ?? '',
-        'annual_revenue' => $data['revenue'] ?? '',
+        'employee_count' => $employees,
+        'annual_revenue' => $revenue,
         'location' => [
             'city' => $data['address1_city'] ?? '',
             'state' => $data['address1_stateorprovince'] ?? '',

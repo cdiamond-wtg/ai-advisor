@@ -287,6 +287,20 @@ document.addEventListener('change', function (event) {
 });
 
 // load profile data from crm upon button click
+function fillProfileFields(profile) {
+    Object.entries(profile).forEach(([fieldId, value]) => {
+        if (typeof value === 'object' && value !== null) {
+            Object.entries(value).forEach(([subfieldId, subfieldValue]) => {
+                const field = document.getElementById(`${fieldId}_${subfieldId}`);
+                if (field) field.value = subfieldValue ?? '';
+            });
+            return;
+        }
+        const field = document.getElementById(fieldId);
+        if (field) field.value = value ?? '';
+    });
+}
+
 const profileButton = document.getElementById('profile_button');
 const profileResponse = document.getElementById('profile_response');
 const companyInput = document.getElementById('company');
@@ -307,11 +321,7 @@ profileButton.addEventListener('click', async function () {
         const result = await response.json();
         profileResponse.textContent = result.message ?? '';
         if (!result.profile_found || !result.profile) return;
-        const profile = result.profile;
-        document.getElementById('website').value = profile.website ?? '';
-        document.getElementById('industry').value = profile.industry ?? '';
-        document.getElementById('relationship').value = profile.relationship ?? '';
-        document.getElementById('description').value = profile.description ?? '';
+        fillProfileFields(result.profile);
     }
     catch (error) {
         profileResponse.textContent = 'Unable to send CRM request.';
